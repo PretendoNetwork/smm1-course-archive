@@ -16,6 +16,7 @@ import time
 import sys
 import os
 import json
+import base64
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -75,7 +76,7 @@ async def backend_setup():
 async def scrape():
 	for course_id in range(sys.maxsize): # data_id is a uint64 so try all possible values
 		time.sleep(1) # can be removed, used to not spam Nintendo servers too much
-		#course_id = 0x03CF24CA # testing ID
+		#course_id = 0x3D91EF8 # testing ID
 		print('Trying course ID %d...' % course_id)
 		try:
 			# Get the course data URL
@@ -95,7 +96,12 @@ async def scrape():
 			metadata = {
 				'is_event_course': False,
 				'is_official_maker_course': False,
-				'world_record': {}
+				'world_record': {},
+				'miis': {
+					'creator': {},
+					'world_record': {},
+					'first_complete': {}
+				}
 			}
 
 			if course_id in event_course_ids or course_id in official_maker_course_ids:
@@ -107,7 +113,6 @@ async def scrape():
 				param.persistence_target.persistence_id = 0xFFFF
 				param.result_option = 6
 				param.access_password = 0
-
 
 				result = await datastore_smm_client.get_metas_multiple_param([param])
 
@@ -152,6 +157,49 @@ async def scrape():
 			metadata['world_record']['time_milliseconds'] = result.best_score
 			metadata['world_record']['created_time'] = result.created_time.val
 			metadata['world_record']['updated_time'] = result.updated_time.val
+
+			# Get Mii data for the course creator, WR holder and first time completion
+
+			param_creator = datastore_smm.DataStoreGetMetaParam()
+			param_creator.data_id = 0
+			param_creator.persistence_target = datastore_smm.DataStorePersistenceTarget()
+			param_creator.persistence_target.owner_id = metadata['creator_pid']
+			param_creator.persistence_target.persistence_id = 0
+			param_creator.result_option = 4
+			param_creator.access_password = 0
+
+			param_world_record = datastore_smm.DataStoreGetMetaParam()
+			param_world_record.data_id = 0
+			param_world_record.persistence_target = datastore_smm.DataStorePersistenceTarget()
+			param_world_record.persistence_target.owner_id = metadata['world_record']['best_time_pid']
+			param_world_record.persistence_target.persistence_id = 0
+			param_world_record.result_option = 4
+			param_world_record.access_password = 0
+
+			param_first_complete = datastore_smm.DataStoreGetMetaParam()
+			param_first_complete.data_id = 0
+			param_first_complete.persistence_target = datastore_smm.DataStorePersistenceTarget()
+			param_first_complete.persistence_target.owner_id = metadata['world_record']['first_complete_pid']
+			param_first_complete.persistence_target.persistence_id = 0
+			param_first_complete.result_option = 4
+			param_first_complete.access_password = 0
+
+			params = [param_creator, param_world_record, param_first_complete]
+
+			result = await datastore_smm_client.get_metas_multiple_param(params)
+
+			mii_data_creator = result.infos[0]
+			mii_data_world_record = result.infos[1]
+			mii_data_first_complete = result.infos[2]
+
+			metadata['miis']['creator']['nnid'] = mii_data_creator.name
+			metadata['miis']['creator']['mii_data'] = base64.b64encode(mii_data_creator.meta_binary).decode('utf8')
+
+			metadata['miis']['world_record']['nnid'] = mii_data_world_record.name
+			metadata['miis']['world_record']['mii_data'] = base64.b64encode(mii_data_world_record.meta_binary).decode('utf8')
+
+			metadata['miis']['first_complete']['nnid'] = mii_data_first_complete.name
+			metadata['miis']['first_complete']['mii_data'] = base64.b64encode(mii_data_first_complete.meta_binary).decode('utf8')
 
 			# Download course and save metadata to disk
 
