@@ -11,21 +11,36 @@ The data stored is as follows
 ```json
 {
     "is_event_course": false,
-    "is_official_maker_course": true,
+    "is_official_maker_course": false,
     "world_record": {
-        "best_time_pid": 1743322661,
-        "first_complete_pid": 1796468065,
-        "time_milliseconds": 20854,
-        "created_time": 135278005253,
-        "updated_time": 135547134545
+        "best_time_pid": 1789569249,
+        "first_complete_pid": 1745762670,
+        "time_milliseconds": 32224,
+        "created_time": 135504152813,
+        "updated_time": 135581212346
     },
-    "upload_time": 135278005109,
-    "course_name": "見た目は丸いがハードな奴だぜ!",
-    "creator_pid": 1770179640,
-    "user_plays": 519869,
-    "clears": 89666,
-    "total_attempts": 3138349,
-    "failures": 3048683
+    "miis": {
+        "creator": {
+            "nnid": "lokh-cel",
+            "mii_data": "QlBGQwAAAAEAAAAAAAAAAAAAAAAAAQAAAwAAQAoEukWgJJCg1y2zTRLuST2wjAAAKSNMAG8AawBoADQAAABFAAAAAAAAAD4uAEBUBlRpRRrANEYUgRIBaA0AACnBUUhQQwDpAGMA6QAAAAAAAAAAAAAAAAAAAEnAAAAAAAAAAAAAAAAAAAAAAAAAAAU="
+        },
+        "world_record": {
+            "nnid": "cmiles1",
+            "mii_data": "QlBGQwAAAAEAAAAAAAAAAAAAAAAAAQAAAAAAQICDOaSAxGDw09yOuWjyHfIgOQAAAABtAGkAbABlAHMAAABFAAAAAAAAAEBApABMADEGghQMIoUOgxIIaA4AACmAQUhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI+NAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        },
+        "first_complete": {
+            "nnid": "alesca1984",
+            "mii_data": "QlBGQwAAAAEAAAAAAAAAAAAAAAAAAQAAAwAAQKHzISgmB+HS2H8zxTQMTlqSzwAAACxzAGMAYQBnAGwAaQBvADgANAAAAGJEAABrAQJoRBgmNEYUgRIXaA0ABCkAUkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0+AAAAAAAAAAAAAAAAAAAAAAAAAAg="
+        }
+    },
+    "stars": 9,
+    "upload_time": 135504150772,
+    "course_name": "Super Mario One-Screen 1-1",
+    "creator_pid": 1752128461,
+    "user_plays": 62,
+    "clears": 36,
+    "total_attempts": 154,
+    "failures": 118
 }
 ```
 
