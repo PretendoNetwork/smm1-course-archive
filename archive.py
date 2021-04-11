@@ -76,7 +76,7 @@ async def backend_setup():
 async def scrape():
 	for course_id in range(sys.maxsize): # data_id is a uint64 so try all possible values
 		time.sleep(1) # can be removed, used to not spam Nintendo servers too much
-		#course_id = 0x3D91EF8 # testing ID
+		course_id = 0x3D91EF8 # testing ID
 		print('Trying course ID %d...' % course_id)
 		try:
 			# Get the course data URL
@@ -88,8 +88,6 @@ async def scrape():
 
 			headers = {header.key: header.value for header in result.headers}
 			course_data_url = result.url
-
-			print(course_data_url)
 
 			# Get course metadata
 
