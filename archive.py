@@ -236,12 +236,12 @@ class DataStoreGetCustomRankingByDataIdParam(common.Structure):
 		self.data_id_list = None
 		self.result_option = None
 	
-	def load(self, stream):
+	def load(self, stream, version):
 		self.application_id = stream.u32()
 		self.data_id_list = stream.list(stream.u64)
 		self.result_option = stream.u8()
 	
-	def save(self, stream):
+	def save(self, stream, version):
 		stream.u32(self.application_id)
 		stream.list(self.data_id_list, stream.u64)
 		stream.u8(self.result_option)
@@ -253,12 +253,12 @@ class DataStoreCustomRankingResult(common.Structure):
 		self.score = None
 		self.meta_info = None
 	
-	def load(self, stream):
+	def load(self, stream, version):
 		self.order = stream.u32()
 		self.score = stream.u32()
 		self.meta_info = stream.extract(datastore_smm.DataStoreMetaInfo)
 	
-	def save(self, stream):
+	def save(self, stream, version):
 		stream.u32(self.order)
 		stream.u32(self.score)
 		stream.add(self.meta_info)
@@ -269,11 +269,11 @@ class DataStoreGetCourseRecordParam(common.Structure):
 		self.data_id = None
 		self.slot = None
 	
-	def load(self, stream):
+	def load(self, stream, version):
 		self.data_id = stream.u64()
 		self.slot = stream.u8()
 	
-	def save(self, stream):
+	def save(self, stream, version):
 		stream.u64(self.data_id)
 		stream.u8(self.slot)
 
@@ -288,7 +288,7 @@ class DataStoreGetCourseRecordResult(common.Structure):
 		self.created_time = None
 		self.updated_time = None
 	
-	def load(self, stream):
+	def load(self, stream, version):
 		self.data_id = stream.u64()
 		self.slot = stream.u8()
 		self.first_pid = stream.u32()
@@ -297,7 +297,7 @@ class DataStoreGetCourseRecordResult(common.Structure):
 		self.created_time = stream.datetime()
 		self.updated_time = stream.datetime()
 	
-	def save(self, stream):
+	def save(self, stream, version):
 		stream.u64(self.data_id)
 		stream.u8(self.slot)
 		stream.u32(self.first_pid)

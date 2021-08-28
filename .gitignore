@@ -138,5 +138,5 @@ dmypy.json
 cython_debug/
 
 # custom
-courses
 config.json
+courses
