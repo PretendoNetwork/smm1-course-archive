@@ -24,6 +24,15 @@ logging.basicConfig(level=logging.INFO)
 json_file = open('config.json')
 config = json.load(json_file)
 
+if os.path.isfile('checked.json') and os.access('checked.json', os.R_OK):
+	checked_file = open('checked.json', 'r+')
+	checked_ids = json.load(checked_file)
+	print(checked_ids)
+else:
+	checked_file = open('checked.json', 'r+')
+	checked_ids = []
+
+
 # Unique device info
 DEVICE_ID = config['DEVICE_ID']
 SERIAL_NUMBER = config['SERIAL_NUMBER']
@@ -75,9 +84,14 @@ async def backend_setup():
 
 async def scrape():
 	for course_id in range(sys.maxsize): # data_id is a uint64 so try all possible values
+		if course_id in checked_ids:
+			continue
+		
 		time.sleep(1) # can be removed, used to not spam Nintendo servers too much
 		#course_id = 0x3D91EF8 # testing ID
 		#course_id = 0x03E3092E
+		checked_ids.append(course_id)
+		checked_file.seek(0)
 		print('Trying course ID %d...' % course_id)
 		try:
 			# Get the course data URL
@@ -220,8 +234,11 @@ async def scrape():
 			json.dump(metadata, metadata_file, ensure_ascii=False, indent=4)
 			metadata_file.close()
 
+			json.dump(checked_ids, checked_file, indent=4)
+
 			print('Saved course ID %d' % course_id)
 		except:
+			json.dump(checked_ids, checked_file, indent=4)
 			print('Failed to get course %d' % course_id)
 			pass
 

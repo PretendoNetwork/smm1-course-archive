@@ -139,4 +139,5 @@ cython_debug/
 
 # custom
 config.json
+checked.json
 courses
