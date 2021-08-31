@@ -29,7 +29,7 @@ if os.path.isfile('checked.json') and os.access('checked.json', os.R_OK):
 	checked_ids = json.load(checked_file)
 	print(checked_ids)
 else:
-	checked_file = open('checked.json', 'r+')
+	checked_file = open('checked.json', 'x+')
 	checked_ids = []
 
 
