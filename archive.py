@@ -24,14 +24,13 @@ logging.basicConfig(level=logging.INFO)
 json_file = open('config.json')
 config = json.load(json_file)
 
-if os.path.isfile('checked.json') and os.access('checked.json', os.R_OK):
-	checked_file = open('checked.json', 'r+')
-	checked_ids = json.load(checked_file)
-	print(checked_ids)
+if os.path.isfile('last-checked.txt') and os.access('last-checked.txt', os.R_OK):
+	last_checked_file = open('last-checked.txt', 'r+')
+	last_checked_id = int(last_checked_file.read())
 else:
-	checked_file = open('checked.json', 'x+')
-	checked_ids = []
-
+	last_checked_file = open('last-checked.txt', 'x+')
+	last_checked_file.write("0")
+	last_checked_id = 0
 
 # Unique device info
 DEVICE_ID = config['DEVICE_ID']
@@ -83,15 +82,12 @@ async def backend_setup():
 			await scrape() # start ripping courses
 
 async def scrape():
-	for course_id in range(sys.maxsize): # data_id is a uint64 so try all possible values
-		if course_id in checked_ids:
-			continue
+	for course_id in range(last_checked_id, sys.maxsize): # data_id is a uint64 so try all possible values
 		
 		time.sleep(1) # can be removed, used to not spam Nintendo servers too much
 		#course_id = 0x3D91EF8 # testing ID
 		#course_id = 0x03E3092E
-		checked_ids.append(course_id)
-		checked_file.seek(0)
+		last_checked_file.seek(0)
 		print('Trying course ID %d...' % course_id)
 		try:
 			# Get the course data URL
@@ -234,11 +230,11 @@ async def scrape():
 			json.dump(metadata, metadata_file, ensure_ascii=False, indent=4)
 			metadata_file.close()
 
-			json.dump(checked_ids, checked_file, indent=4)
+			last_checked_file.write(str(course_id))
 
 			print('Saved course ID %d' % course_id)
 		except:
-			json.dump(checked_ids, checked_file, indent=4)
+			last_checked_file.write(str(course_id))
 			print('Failed to get course %d' % course_id)
 			pass
 
