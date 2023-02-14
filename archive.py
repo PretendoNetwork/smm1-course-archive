@@ -151,7 +151,7 @@ async def scrape():
 			metadata['total_attempts'] = meta_info.ratings[3].info.total_value
 			metadata['failures'] = meta_info.ratings[4].info.total_value
 			unknown2 = meta_info.ratings[5].info.total_value
-			unknown3 = meta_info.ratings[6].info.total_value
+			metadata['miiverse_comments'] = meta_info.ratings[6].info.total_value
 
 			# Get course WR data
 
