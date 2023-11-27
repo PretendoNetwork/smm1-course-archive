@@ -1,3 +1,6 @@
+# DEPRECATED AND ARCHIVED
+# SEE https://github.com/PretendoNetwork/archival-tools FOR THE LATEST UPDATES
+
 # SMM1 Course Archive
 ## Download all courses and metadata uploaded to Super Mario Maker 1
 
